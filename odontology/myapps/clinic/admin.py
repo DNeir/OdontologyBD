@@ -12,35 +12,35 @@ from myapps.clinic.models import (
 
 
 class DentistAdmin(admin.ModelAdmin):
-    list_display = ("nombreDentist", "apellidoDentist", "especialidadDentist")
-    search_fields = ("nombreDentist", "apellidoDentist", "especialidadDentist")
-    ordering = ("apellidoDentist", "nombreDentist")
+    list_display = ("dentistName", "dentistLastName", "dentistSpecialty")
+    search_fields = ("dentistName", "dentistLastName", "dentistSpecialty")
+    ordering = ("dentistLastName", "dentistName")
 
     fieldsets = (
         (
-            "Información del Dentista",
-            {"fields": ("nombreDentist", "apellidoDentist", "especialidadDentist")},
+            "Dentist Information",
+            {"fields": ("dentistName", "dentistLastName", "dentistSpecialty")},
         ),
     )
 
 
 class ToothAdmin(admin.ModelAdmin):
-    list_display = ("numeroTooth", "descripcionTooth")
-    search_fields = ("numeroTooth", "descripcionTooth")
-    ordering = ("numeroTooth",)
+    list_display = ("toothNumber", "toothDescription")
+    search_fields = ("toothNumber", "toothDescription")
+    ordering = ("toothNumber",)
 
-    fieldsets = (("Diente", {"fields": ("numeroTooth", "descripcionTooth")}),)
+    fieldsets = (("Tooth", {"fields": ("toothNumber", "toothDescription")}),)
 
 
 class TreatmentAdmin(admin.ModelAdmin):
-    list_display = ("nombreTreatment", "costoTreatment")
-    search_fields = ("nombreTreatment", "descripcionTreatment")
-    ordering = ("nombreTreatment",)
+    list_display = ("treatmentName", "treatmentCost")
+    search_fields = ("treatmentName", "treatmentDescription")
+    ordering = ("treatmentName",)
 
     fieldsets = (
         (
-            "Tratamiento",
-            {"fields": ("nombreTreatment", "descripcionTreatment", "costoTreatment")},
+            "Treatment",
+            {"fields": ("treatmentName", "treatmentDescription", "treatmentCost")},
         ),
     )
 
@@ -53,30 +53,30 @@ class ProcedureInline(admin.TabularInline):
 class TreatmentPlanAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "pacientePlan",
-        "dentistaPlan",
-        "fechaInicioPlan",
-        "estadoPlan",
+        "planPatient",
+        "planDentist",
+        "planStartDate",
+        "planStatus",
     )
-    list_filter = ("estadoPlan", "fechaInicioPlan", "dentistaPlan")
+    list_filter = ("planStatus", "planStartDate", "planDentist")
     search_fields = (
-        "pacientePlan__nombrePatient",
-        "pacientePlan__apellidoPatient",
-        "dentistaPlan__nombreDentist",
-        "dentistaPlan__apellidoDentist",
+        "planPatient__patientName",
+        "planPatient__patientLastName",
+        "planDentist__dentistName",
+        "planDentist__dentistLastName",
     )
-    ordering = ("-fechaInicioPlan",)
+    ordering = ("-planStartDate",)
 
     fieldsets = (
         (
-            "Plan de Tratamiento",
+            "Treatment Plan",
             {
                 "fields": (
-                    "pacientePlan",
-                    "dentistaPlan",
-                    "fechaInicioPlan",
-                    "fechaFinPlan",
-                    "estadoPlan",
+                    "planPatient",
+                    "planDentist",
+                    "planStartDate",
+                    "planEndDate",
+                    "planStatus",
                 )
             },
         ),
@@ -86,44 +86,44 @@ class TreatmentPlanAdmin(admin.ModelAdmin):
 
 class ProcedureAdmin(admin.ModelAdmin):
     list_display = (
-        "planProcedure",
-        "tratamientoProcedure",
-        "dienteProcedure",
-        "fechaProcedure",
+        "procedurePlan",
+        "procedureTreatment",
+        "procedureTooth",
+        "procedureDate",
     )
-    list_filter = ("fechaProcedure", "tratamientoProcedure", "dienteProcedure")
+    list_filter = ("procedureDate", "procedureTreatment", "procedureTooth")
     search_fields = (
-        "planProcedure__pacientePlan__nombrePatient",
-        "planProcedure__pacientePlan__apellidoPatient",
-        "tratamientoProcedure__nombreTreatment",
+        "procedurePlan__planPatient__patientName",
+        "procedurePlan__planPatient__patientLastName",
+        "procedureTreatment__treatmentName",
     )
-    ordering = ("-fechaProcedure",)
+    ordering = ("-procedureDate",)
 
     fieldsets = (
         (
-            "Procedimiento",
+            "Procedure",
             {
                 "fields": (
-                    "planProcedure",
-                    "tratamientoProcedure",
-                    "dienteProcedure",
-                    "fechaProcedure",
+                    "procedurePlan",
+                    "procedureTreatment",
+                    "procedureTooth",
+                    "procedureDate",
                 )
             },
         ),
-        ("Observaciones", {"fields": ("observacionesProcedure",)}),
+        ("Observations", {"fields": ("procedureNotes",)}),
     )
 
 
 class TreatmentMaterialAdmin(admin.ModelAdmin):
-    list_display = ("tratamientoTm", "materialTm", "cantidadTm")
-    list_filter = ("tratamientoTm", "materialTm")
-    search_fields = ("tratamientoTm__nombreTreatment", "materialTm__nombreMaterial")
+    list_display = ("tmTreatment", "tmMaterial", "tmQuantity")
+    list_filter = ("tmTreatment", "tmMaterial")
+    search_fields = ("tmTreatment__treatmentName", "tmMaterial__materialName")
 
     fieldsets = (
         (
-            "Asignación de Material",
-            {"fields": ("tratamientoTm", "materialTm", "cantidadTm")},
+            "Material Assignment",
+            {"fields": ("tmTreatment", "tmMaterial", "tmQuantity")},
         ),
     )
 

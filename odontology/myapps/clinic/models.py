@@ -4,61 +4,55 @@ from django.db import models
 
 
 class Dentist(models.Model):
-    nombreDentist = models.CharField(
-        max_length=100, help_text="Ingrese el nombre del dentista"
+    dentistName = models.CharField(max_length=100, help_text="Enter the dentist's name")
+    dentistLastName = models.CharField(
+        max_length=100, help_text="Enter the dentist's last name"
     )
-    apellidoDentist = models.CharField(
-        max_length=100, help_text="Ingrese los apellidos del dentista"
-    )
-    especialidadDentist = models.CharField(
-        max_length=100, blank=True, null=True, help_text="Especialidad del dentista"
+    dentistSpecialty = models.CharField(
+        max_length=100, blank=True, null=True, help_text="Dentist's specialty"
     )
 
     def __str__(self):
-        return f"{self.nombreDentist} {self.apellidoDentist}"
+        return f"{self.dentistName} {self.dentistLastName}"
 
     class Meta:
-        verbose_name = "dentista"
-        verbose_name_plural = "dentistas"
+        verbose_name = "dentist"
+        verbose_name_plural = "dentists"
 
 
 class Tooth(models.Model):
-    numeroTooth = models.CharField(
-        max_length=10, help_text="Número o código del diente"
-    )
-    descripcionTooth = models.TextField(
-        blank=True, null=True, help_text="Descripción del diente"
+    toothNumber = models.CharField(max_length=10, help_text="Tooth number or code")
+    toothDescription = models.TextField(
+        blank=True, null=True, help_text="Tooth description"
     )
 
     def __str__(self):
-        return f"Diente {self.numeroTooth}"
+        return f"Tooth {self.toothNumber}"
 
     class Meta:
-        verbose_name = "diente"
-        verbose_name_plural = "dientes"
+        verbose_name = "tooth"
+        verbose_name_plural = "teeth"
 
 
 class Treatment(models.Model):
-    nombreTreatment = models.CharField(
-        max_length=100, help_text="Nombre del tratamiento"
+    treatmentName = models.CharField(max_length=100, help_text="Treatment name")
+    treatmentDescription = models.TextField(
+        blank=True, null=True, help_text="Treatment description"
     )
-    descripcionTreatment = models.TextField(
-        blank=True, null=True, help_text="Descripción del tratamiento"
-    )
-    costoTreatment = models.DecimalField(
+    treatmentCost = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         blank=True,
         null=True,
-        help_text="Costo del tratamiento",
+        help_text="Treatment cost",
     )
 
     def __str__(self):
-        return f"{self.nombreTreatment}"
+        return f"{self.treatmentName}"
 
     class Meta:
-        verbose_name = "tratamiento"
-        verbose_name_plural = "tratamientos"
+        verbose_name = "treatment"
+        verbose_name_plural = "treatments"
 
 
 class TreatmentPlan(models.Model):
@@ -67,94 +61,92 @@ class TreatmentPlan(models.Model):
         ("INACTIVE", "Inactive"),
     ]
 
-    pacientePlan = models.ForeignKey(
+    planPatient = models.ForeignKey(
         "patients.Patient",
         on_delete=models.CASCADE,
         related_name="treatment_plans",
-        help_text="Seleccione el paciente",
+        help_text="Select the patient",
     )
-    dentistaPlan = models.ForeignKey(
+    planDentist = models.ForeignKey(
         Dentist,
         on_delete=models.CASCADE,
         related_name="treatment_plans",
-        help_text="Seleccione el dentista responsable",
+        help_text="Select the responsible dentist",
     )
-    fechaInicioPlan = models.DateField(help_text="Fecha de inicio del plan")
-    fechaFinPlan = models.DateField(
-        blank=True, null=True, help_text="Fecha de fin prevista (opcional)"
+    planStartDate = models.DateField(help_text="Plan start date")
+    planEndDate = models.DateField(
+        blank=True, null=True, help_text="Expected end date (optional)"
     )
-    estadoPlan = models.CharField(
+    planStatus = models.CharField(
         max_length=8,
         choices=STATUS_CHOICES,
         default="ACTIVE",
-        help_text="Estado actual del plan",
+        help_text="Current plan status",
     )
 
     def __str__(self):
-        return f"Plan {self.id} - {self.pacientePlan}"
+        return f"Plan {self.id} - {self.planPatient}"
 
     class Meta:
-        verbose_name = "plan de tratamiento"
-        verbose_name_plural = "planes de tratamiento"
+        verbose_name = "treatment plan"
+        verbose_name_plural = "treatment plans"
 
 
 class Procedure(models.Model):
-    planProcedure = models.ForeignKey(
+    procedurePlan = models.ForeignKey(
         TreatmentPlan,
         on_delete=models.CASCADE,
         related_name="procedures",
-        help_text="Plan de tratamiento al que pertenece",
+        help_text="Treatment plan this procedure belongs to",
     )
-    tratamientoProcedure = models.ForeignKey(
+    procedureTreatment = models.ForeignKey(
         Treatment,
         on_delete=models.CASCADE,
         related_name="procedures",
-        help_text="Tratamiento realizado",
+        help_text="Treatment performed",
     )
-    dienteProcedure = models.ForeignKey(
+    procedureTooth = models.ForeignKey(
         Tooth,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="procedures",
-        help_text="Diente intervenido (opcional)",
+        help_text="Tooth involved (optional)",
     )
-    fechaProcedure = models.DateField(
-        help_text="Fecha en que se realizó el procedimiento"
-    )
-    observacionesProcedure = models.TextField(
-        blank=True, null=True, help_text="Observaciones adicionales"
+    procedureDate = models.DateField(help_text="Date the procedure was performed")
+    procedureNotes = models.TextField(
+        blank=True, null=True, help_text="Additional notes"
     )
 
     def __str__(self):
-        return f"{self.tratamientoProcedure} ({self.fechaProcedure})"
+        return f"{self.procedureTreatment} ({self.procedureDate})"
 
     class Meta:
-        verbose_name = "procedimiento"
-        verbose_name_plural = "procedimientos"
+        verbose_name = "procedure"
+        verbose_name_plural = "procedures"
 
 
 class TreatmentMaterial(models.Model):
-    tratamientoTm = models.ForeignKey(
+    tmTreatment = models.ForeignKey(
         Treatment,
         on_delete=models.CASCADE,
         related_name="materiales_usados",
-        help_text="Tratamiento que utiliza el material",
+        help_text="Treatment that uses the material",
     )
-    materialTm = models.ForeignKey(
+    tmMaterial = models.ForeignKey(
         "inventory.Material",
         on_delete=models.CASCADE,
         related_name="tratamientos",
-        help_text="Material empleado",
+        help_text="Material used",
     )
-    cantidadTm = models.DecimalField(
-        max_digits=10, decimal_places=2, help_text="Cantidad utilizada"
+    tmQuantity = models.DecimalField(
+        max_digits=10, decimal_places=2, help_text="Quantity used"
     )
 
     def __str__(self):
-        return f"{self.cantidadTm} de {self.materialTm} en {self.tratamientoTm}"
+        return f"{self.tmQuantity} of {self.tmMaterial} in {self.tmTreatment}"
 
     class Meta:
-        verbose_name = "material por tratamiento"
-        verbose_name_plural = "materiales por tratamiento"
-        unique_together = ("tratamientoTm", "materialTm")
+        verbose_name = "treatment material"
+        verbose_name_plural = "treatment materials"
+        unique_together = ("tmTreatment", "tmMaterial")

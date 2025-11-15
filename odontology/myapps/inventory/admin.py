@@ -5,45 +5,45 @@ from myapps.inventory.models import DentalLab, Material, Payment
 
 
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ("nombreMaterial", "stockMaterial")
-    search_fields = ("nombreMaterial", "descripcionMaterial")
-    ordering = ("nombreMaterial",)
+    list_display = ("materialName", "materialStock")
+    search_fields = ("materialName", "materialDescription")
+    ordering = ("materialName",)
 
     fieldsets = (
         (
             "Material",
-            {"fields": ("nombreMaterial", "descripcionMaterial", "stockMaterial")},
+            {"fields": ("materialName", "materialDescription", "materialStock")},
         ),
     )
 
 
 class DentalLabAdmin(admin.ModelAdmin):
-    list_display = ("nombreLab", "telefonoLab")
-    search_fields = ("nombreLab", "telefonoLab", "direccionLab")
-    ordering = ("nombreLab",)
+    list_display = ("labName", "labPhone")
+    search_fields = ("labName", "labPhone", "labAddress")
+    ordering = ("labName",)
 
     fieldsets = (
         (
-            "Laboratorio Dental",
-            {"fields": ("nombreLab", "telefonoLab", "direccionLab")},
+            "Dental Lab",
+            {"fields": ("labName", "labPhone", "labAddress")},
         ),
     )
 
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ("planPayment", "montoPayment", "metodoPayment", "fechaHoraPayment")
-    list_filter = ("fechaHoraPayment", "metodoPayment")
+    list_display = ("paymentPlan", "paymentAmount", "paymentMethod", "paymentDateTime")
+    list_filter = ("paymentDateTime", "paymentMethod")
     search_fields = (
-        "planPayment__pacientePlan__nombrePatient",
-        "planPayment__pacientePlan__apellidoPatient",
+        "paymentPlan__planPatient__patientName",
+        "paymentPlan__planPatient__patientLastName",
     )
-    ordering = ("-fechaHoraPayment",)
+    ordering = ("-paymentDateTime",)
 
     fieldsets = (
-        ("Pago", {"fields": ("planPayment", "montoPayment", "metodoPayment")}),
-        ("Registro", {"fields": ("fechaHoraPayment",), "classes": ("collapse",)}),
+        ("Payment", {"fields": ("paymentPlan", "paymentAmount", "paymentMethod")}),
+        ("Record", {"fields": ("paymentDateTime",), "classes": ("collapse",)}),
     )
-    readonly_fields = ("fechaHoraPayment",)
+    readonly_fields = ("paymentDateTime",)
 
 
 admin.site.register(Material, MaterialAdmin)

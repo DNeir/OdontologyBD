@@ -1,80 +1,81 @@
 # Create your models here.
-# from django.db import models
 from django.core.validators import RegexValidator
 from django.db import models
 
 
 class Patient(models.Model):
-    nombrePatient = models.CharField(
-        max_length=100, help_text="Ingrese el nombre del paciente"
+    patientName = models.CharField(
+        max_length=100, help_text="Enter patient's first name"
     )
-    apellidoPatient = models.CharField(
-        max_length=100, help_text="Ingrese los apellidos del paciente"
+    patientLastName = models.CharField(
+        max_length=100, help_text="Enter patient's last name"
     )
-    fechaNacimientoPatient = models.DateField(
-        blank=True, null=True, help_text="Ingrese la fecha de nacimiento del paciente"
+    patientBirthDate = models.DateField(
+        blank=True, null=True, help_text="Enter patient's birth date"
     )
-    telefonoPatient = models.CharField(
+    patientPhone = models.CharField(
         max_length=20,
         blank=True,
         null=True,
-        validators=[RegexValidator(r"^\+?1?\d{7,15}$", "Teléfono inválido.")],
-        help_text="Ingrese el teléfono del paciente",
+        validators=[RegexValidator(r"^\+?1?\d{7,15}$", "Invalid phone number.")],
+        help_text="Enter patient's phone number",
     )
-    direccionPatient = models.TextField(
-        blank=True, null=True, help_text="Ingrese la dirección del paciente"
+    patientAddress = models.TextField(
+        blank=True, null=True, help_text="Enter patient's address"
     )
 
     def __str__(self):
-        return f"{self.nombrePatient} {self.apellidoPatient}"
+        return f"{self.patientName} {self.patientLastName}"
 
     class Meta:
-        verbose_name = "paciente"
-        verbose_name_plural = "pacientes"
+        verbose_name = "patient"
+        verbose_name_plural = "patients"
 
 
 class DentalHistory(models.Model):
-    pacienteHistory = models.OneToOneField(
+    historyPatient = models.OneToOneField(
         Patient,
         on_delete=models.CASCADE,
         related_name="dental_history",
-        help_text="Seleccione el paciente al que pertenece esta historia",
+        help_text="Select the patient this record belongs to",
     )
-    anamnesisHistory = models.TextField(
-        blank=True, null=True, help_text="Ingrese la anamnesis del paciente"
+    historyAnamnesis = models.TextField(
+        blank=True, null=True, help_text="Enter patient anamnesis"
     )
 
     def __str__(self):
-        return f"Historia de {self.pacienteHistory}"
+        return f"History for {self.historyPatient}"
 
     class Meta:
-        verbose_name = "historia dental"
-        verbose_name_plural = "historias dentales"
+        verbose_name = "dental history"
+        verbose_name_plural = "dental histories"
 
 
 class Appointment(models.Model):
-    pacienteAppointment = models.ForeignKey(
+    appointmentPatient = models.ForeignKey(
         Patient,
         on_delete=models.CASCADE,
         related_name="appointments",
-        help_text="Seleccione el paciente de la cita",
+        help_text="Select appointment patient",
     )
-    dentistaAppointment = models.ForeignKey(
-        "clinic.Dentist",  # cambia el nombre de la app si usas otro
+    appointmentDentist = models.ForeignKey(
+        "clinic.Dentist",
         on_delete=models.CASCADE,
         related_name="appointments",
-        help_text="Seleccione el dentista de la cita",
+        help_text="Select appointment dentist",
     )
-    fechaHoraAppointment = models.DateTimeField(
-        help_text="Ingrese la fecha y hora de la cita"
+    appointmentDateTime = models.DateTimeField(
+        help_text="Enter appointment date and time"
     )
-    motivoAppointment = models.TextField(
-        blank=True, null=True, help_text="Ingrese el motivo o razón de la cita"
+    appointmentReason = models.TextField(
+        blank=True, null=True, help_text="Enter reason for appointment"
     )
 
     def __str__(self):
-        return f"Cita de {self.pacienteAppointment} el {self.fechaHoraAppointment}"
+        return (
+            f"Appointment for {self.appointmentPatient} on {self.appointmentDateTime}"
+        )
 
     class Meta:
-        verbose_name = "cita"
-        verbose_name_plural = "citas"
+        verbose_name = "appointment"
+        verbose_name_plural = "appointments"

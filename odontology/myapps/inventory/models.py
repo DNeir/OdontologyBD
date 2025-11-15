@@ -4,62 +4,62 @@ from django.db import models
 
 
 class Material(models.Model):
-    nombreMaterial = models.CharField(max_length=100, help_text="Nombre del material")
-    descripcionMaterial = models.TextField(
-        blank=True, null=True, help_text="Descripción del material"
+    materialName = models.CharField(
+        max_length=100, help_text="Material name", null=True
     )
-    stockMaterial = models.IntegerField(default=0, help_text="Cantidad en inventario")
+    materialDescription = models.TextField(
+        blank=True, null=True, help_text="Material description"
+    )
+    materialStock = models.IntegerField(default=0, help_text="Stock quantity")
 
     def __str__(self):
-        return f"{self.nombreMaterial}"
+        return f"{self.materialName}"
 
     class Meta:
         verbose_name = "material"
-        verbose_name_plural = "materiales"
+        verbose_name_plural = "materials"
 
 
 class DentalLab(models.Model):
-    nombreLab = models.CharField(
-        max_length=100, help_text="Nombre del laboratorio dental"
+    labName = models.CharField(
+        max_length=100, help_text="Dental laboratory name", null=True
     )
-    telefonoLab = models.CharField(
-        max_length=20, blank=True, null=True, help_text="Teléfono de contacto"
+    labPhone = models.CharField(
+        max_length=20, blank=True, null=True, help_text="Contact phone"
     )
-    direccionLab = models.TextField(
-        blank=True, null=True, help_text="Dirección del laboratorio"
-    )
+    labAddress = models.TextField(blank=True, null=True, help_text="Laboratory address")
 
     def __str__(self):
-        return f"{self.nombreLab}"
+        return f"{self.labName}"
 
     class Meta:
-        verbose_name = "laboratorio dental"
-        verbose_name_plural = "laboratorios dentales"
+        verbose_name = "dental lab"
+        verbose_name_plural = "dental labs"
 
 
 class Payment(models.Model):
-    planPayment = models.ForeignKey(
+    paymentPlan = models.ForeignKey(
         "clinic.TreatmentPlan",
         on_delete=models.CASCADE,
         related_name="payments",
-        help_text="Plan de tratamiento al que se asocia el pago",
+        help_text="Treatment plan associated with the payment",
     )
-    fechaHoraPayment = models.DateTimeField(
-        auto_now_add=True, help_text="Fecha y hora en que se registró el pago"
+    paymentDateTime = models.DateTimeField(
+        auto_now_add=True, help_text="Date and time the payment was recorded"
     )
-    montoPayment = models.DecimalField(
-        max_digits=10, decimal_places=2, help_text="Monto pagado"
+    paymentAmount = models.DecimalField(
+        max_digits=10, decimal_places=2, help_text="Amount paid"
     )
-    metodoPayment = models.CharField(
+    paymentMethod = models.CharField(
         max_length=50,
         blank=True,
         null=True,
-        help_text="Método de pago (efectivo, tarjeta, transferencia...)",
+        help_text="Payment method (cash, card, transfer...)",
     )
 
     def __str__(self):
-        return f"Pago {self.montoPayment} ({self.fechaHoraPayment:%d/%m/%Y %H:%M})"
+        return f"Payment {self.paymentAmount} ({self.paymentDateTime:%d/%m/%Y %H:%M})"
 
     class Meta:
-        verbose_name = "pago"
-        verbose_name_plural = "pagos"
+        verbose_name = "payment"
+        verbose_name_plural = "payments"

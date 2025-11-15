@@ -5,70 +5,70 @@ from myapps.patients.models import Appointment, DentalHistory, Patient
 # Register your models here.
 class PatientAdmin(admin.ModelAdmin):
     list_display = (
-        "nombrePatient",
-        "apellidoPatient",
-        "fechaNacimientoPatient",
-        "telefonoPatient",
+        "patientName",
+        "patientLastName",
+        "patientBirthDate",
+        "patientPhone",
     )
-    list_filter = ("fechaNacimientoPatient",)
+    list_filter = ("patientBirthDate",)
     search_fields = (
-        "nombrePatient",
-        "apellidoPatient",
-        "telefonoPatient",
-        "direccionPatient",
+        "patientName",
+        "patientLastName",
+        "patientPhone",
+        "patientAddress",
     )
-    ordering = ("apellidoPatient", "nombrePatient")
+    ordering = ("patientLastName", "patientName")
 
     fieldsets = (
         (
-            "Información Personal",
-            {"fields": ("nombrePatient", "apellidoPatient", "fechaNacimientoPatient")},
+            "Personal Information",
+            {"fields": ("patientName", "patientLastName", "patientBirthDate")},
         ),
-        ("Contacto", {"fields": ("telefonoPatient", "direccionPatient")}),
+        ("Contact", {"fields": ("patientPhone", "patientAddress")}),
     )
 
 
 class DentalHistoryAdmin(admin.ModelAdmin):
-    list_display = ("pacienteHistory",)
+    list_display = ("historyPatient",)
     search_fields = (
-        "pacienteHistory__nombrePatient",
-        "pacienteHistory__apellidoPatient",
+        "historyPatient__patientName",
+        "historyPatient__patientLastName",
     )
-    ordering = ("pacienteHistory__apellidoPatient", "pacienteHistory__nombrePatient")
+    ordering = ("historyPatient__patientLastName", "historyPatient__patientName")
 
     fieldsets = (
-        ("Paciente", {"fields": ("pacienteHistory",)}),
-        ("Historia", {"fields": ("anamnesisHistory",)}),
+        ("Patient", {"fields": ("historyPatient",)}),
+        ("History", {"fields": ("historyAnamnesis",)}),
     )
 
 
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = (
-        "pacienteAppointment",
-        "dentistaAppointment",
-        "fechaHoraAppointment",
-        "motivoAppointment",
+        "appointmentPatient",
+        "appointmentDentist",
+        "appointmentDateTime",
+        "appointmentReason",
     )
-    list_filter = ("fechaHoraAppointment", "dentistaAppointment")
+    list_filter = ("appointmentDateTime", "appointmentDentist")
     search_fields = (
-        "pacienteAppointment__nombrePatient",
-        "pacienteAppointment__apellidoPatient",
-        "motivoAppointment",
+        "appointmentPatient__patientName",
+        "appointmentPatient__patientLastName",
+        "appointmentReason",
     )
-    ordering = ("-fechaHoraAppointment",)
+    ordering = ("-appointmentDateTime",)
 
     fieldsets = (
         (
-            "Cita",
+            "Appointment",
             {
                 "fields": (
-                    "pacienteAppointment",
-                    "dentistaAppointment",
-                    "fechaHoraAppointment",
+                    "appointmentPatient",
+                    "appointmentDentist",
+                    "appointmentDateTime",
                 )
             },
         ),
-        ("Motivo / Observaciones", {"fields": ("motivoAppointment",)}),
+        ("Reason / Notes", {"fields": ("appointmentReason",)}),
     )
 
 
