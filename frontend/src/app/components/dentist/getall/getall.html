@@ -1,1 +1,73 @@
-<p>getall works!</p>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="p-grid p-justify-between p-align-center">
+  <div class="p-col">
+    <h2>Listado de Dentistas</h2>
+  </div>
+  <div class="p-col-fixed">
+    <p-button
+      label="Nuevo Dentista"
+      icon="pi pi-plus"
+      routerLink="/dentists/new"
+      styleClass="p-button-success"
+    >
+    </p-button>
+  </div>
+</div>
+
+<p-table
+  [value]="dentists"
+  [loading]="loading"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  styleClass="p-datatable-striped"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+      <th pSortableColumn="dentistName">Nombre <p-sortIcon field="dentistName"></p-sortIcon></th>
+      <th pSortableColumn="dentistLastName">
+        Apellido <p-sortIcon field="dentistLastName"></p-sortIcon>
+      </th>
+      <th pSortableColumn="dentistSpecialty">
+        Especialidad <p-sortIcon field="dentistSpecialty"></p-sortIcon>
+      </th>
+      <th style="width: 10rem">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-d>
+    <tr>
+      <td>{{ d.id }}</td>
+      <td>{{ d.dentistName }}</td>
+      <td>{{ d.dentistLastName }}</td>
+      <td>{{ d.dentistSpecialty || '-' }}</td>
+      <td>
+        <div class="p-button-group">
+          <p-button
+            icon="pi pi-pencil"
+            pTooltip="Editar"
+            tooltipPosition="top"
+            styleClass="p-button-rounded p-button-info p-mr-1"
+            [routerLink]="['/dentists/edit', d.id]"
+          >
+          </p-button>
+          <p-button
+            icon="pi pi-trash"
+            pTooltip="Eliminar"
+            tooltipPosition="top"
+            styleClass="p-button-rounded p-button-danger"
+            (click)="confirmDelete(d)"
+          >
+          </p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5">No hay dentistas registrados</td>
+    </tr>
+  </ng-template>
+</p-table>

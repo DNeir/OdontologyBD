@@ -1,1 +1,37 @@
-<p>update works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+	<div class="p-col-12 p-md-6">
+		<p-card>
+			<ng-template pTemplate="title">Editar Pago</ng-template>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="p-fluid p-formgrid p-grid">
+					<div class="p-field p-col-12">
+						<label for="paymentPlan">Plan</label>
+						<p-select [options]="plans" optionLabel="id" optionValue="id" formControlName="paymentPlan" placeholder="Seleccione plan"></p-select>
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="paymentDateTime">Fecha y hora</label>
+						<input id="paymentDateTime" type="datetime-local" pInputText formControlName="paymentDateTime" />
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="paymentAmount">Monto</label>
+						<input id="paymentAmount" type="number" pInputText formControlName="paymentAmount" />
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="paymentMethod">Método</label>
+						<input id="paymentMethod" pInputText formControlName="paymentMethod" />
+					</div>
+				</div>
+
+				<div class="p-d-flex p-jc-end">
+					<p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+					<p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+				</div>
+			</form>
+		</p-card>
+	</div>
+</div>

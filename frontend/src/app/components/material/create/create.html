@@ -1,1 +1,85 @@
-<p>create works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-between p-align-center p-mb-3">
+  <div class="p-col">
+    <h2>Nuevo Material</h2>
+    <p class="muted">Complete los datos y presione Guardar.</p>
+  </div>
+  <div class="p-col-fixed">
+    <p-button
+      label="Volver"
+      icon="pi pi-arrow-left"
+      routerLink="/materials"
+      styleClass="p-button-secondary"
+    ></p-button>
+  </div>
+</div>
+
+<p-card class="p-mt-3">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid">
+    <div class="p-grid">
+      <div class="p-col-12 p-md-6">
+        <label for="materialName">Nombre <span class="p-error">*</span></label>
+        <input
+          id="materialName"
+          pInputText
+          formControlName="materialName"
+          placeholder="Nombre del material"
+        />
+        <small
+          *ngIf="form.get('materialName')?.invalid && form.get('materialName')?.touched"
+          class="p-error"
+        >
+          Nombre es requerido
+        </small>
+      </div>
+
+      <div class="p-col-12 p-md-6">
+        <label for="materialStock">Stock <span class="p-error">*</span></label>
+        <input
+          id="materialStock"
+          pInputText
+          type="number"
+          formControlName="materialStock"
+          placeholder="0"
+          min="0"
+        />
+        <small
+          *ngIf="form.get('materialStock')?.invalid && form.get('materialStock')?.touched"
+          class="p-error"
+        >
+          Indique una cantidad válida (>= 0)
+        </small>
+      </div>
+
+      <div class="p-col-12">
+        <label for="materialDescription">Descripción</label>
+        <textarea
+          id="materialDescription"
+          pInputTextarea
+          rows="4"
+          formControlName="materialDescription"
+          placeholder="Descripción (opcional)"
+        ></textarea>
+      </div>
+
+      <div class="p-col-12 p-text-right p-mt-3">
+        <p-button
+          label="Guardar"
+          icon="pi pi-save"
+          type="submit"
+          styleClass="p-button-success"
+          [disabled]="form.invalid || saving"
+        ></p-button>
+
+        <p-button
+          label="Cancelar"
+          icon="pi pi-times"
+          routerLink="/materials"
+          styleClass="p-button-secondary p-ml-2"
+          type="button"
+        ></p-button>
+      </div>
+    </div>
+  </form>
+</p-card>

@@ -88,10 +88,10 @@ export const routes: Routes = [
   { path: 'procedures/delete/:id', component: ProcedureDelete },
 
   // Teeth
-  { path: 'dental-pieces', component: TeethGetall },
-  { path: 'dental-pieces/new', component: TeethCreate },
-  { path: 'dental-pieces/edit/:id', component: TeethUpdate },
-  { path: 'dental-pieces/delete/:id', component: TeethDelete },
+  { path: 'teeth', component: TeethGetall },
+  { path: 'teeth/new', component: TeethCreate },
+  { path: 'teeth/edit/:id', component: TeethUpdate },
+  { path: 'teeth/delete/:id', component: TeethDelete },
 
   // MaterialTreatment
   { path: 'material-treatments', component: MaterialTreatmentGetall },

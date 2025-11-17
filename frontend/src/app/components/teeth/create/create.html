@@ -1,1 +1,27 @@
-<p>create works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+	<div class="p-col-12 p-md-6">
+		<p-card>
+			<ng-template pTemplate="title">Nuevo Diente</ng-template>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="p-fluid p-formgrid p-grid">
+					<div class="p-field p-col-12">
+						<label for="toothNumber">Número</label>
+						<input id="toothNumber" pInputText formControlName="toothNumber" />
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="toothDescription">Descripción</label>
+						<textarea id="toothDescription" rows="3" pInputText formControlName="toothDescription"></textarea>
+					</div>
+				</div>
+
+				<div class="p-d-flex p-jc-end">
+					<p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+					<p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+				</div>
+			</form>
+		</p-card>
+	</div>
+</div>

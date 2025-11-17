@@ -1,1 +1,42 @@
-<p>create works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+  <div class="p-col-12 p-md-6">
+    <p-card>
+      <ng-template pTemplate="title">Nuevo Plan de Tratamiento</ng-template>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="p-field p-col-12">
+            <label for="planPatient">Paciente</label>
+            <p-select id="planPatient" [options]="patients" optionLabel="patientName" optionValue="patientId" formControlName="planPatient" placeholder="Seleccionar paciente"></p-select>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="planDentist">Dentista</label>
+            <p-select id="planDentist" [options]="dentists" optionLabel="dentistName" optionValue="dentistId" formControlName="planDentist" placeholder="Seleccionar dentista"></p-select>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="planStartDate">Fecha Inicio</label>
+            <p-datepicker id="planStartDate" formControlName="planStartDate" dateFormat="yy-mm-dd" placeholder="yyyy-mm-dd"></p-datepicker>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="planEndDate">Fecha Fin</label>
+            <p-datepicker id="planEndDate" formControlName="planEndDate" dateFormat="yy-mm-dd" placeholder="yyyy-mm-dd"></p-datepicker>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="planStatus">Estado</label>
+            <p-select id="planStatus" [options]="[{label: 'Activo', value: 'ACTIVE'}, {label: 'Inactivo', value: 'INACTIVE'}]" optionLabel="label" optionValue="value" formControlName="planStatus" placeholder="Seleccionar estado"></p-select>
+          </div>
+        </div>
+
+        <div class="p-d-flex p-jc-end">
+          <p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+          <p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

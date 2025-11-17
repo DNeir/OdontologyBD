@@ -1,1 +1,32 @@
-<p>update works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+	<div class="p-col-12 p-md-6">
+		<p-card>
+			<ng-template pTemplate="title">Editar Material</ng-template>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="p-fluid p-formgrid p-grid">
+					<div class="p-field p-col-12">
+						<label for="materialName">Nombre</label>
+						<input id="materialName" pInputText formControlName="materialName" />
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="materialDescription">Descripción</label>
+						<textarea id="materialDescription" rows="3" pInputText formControlName="materialDescription"></textarea>
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="materialStock">Stock</label>
+						<input id="materialStock" type="number" pInputText formControlName="materialStock" />
+					</div>
+				</div>
+
+				<div class="p-d-flex p-jc-end">
+					<p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+					<p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+				</div>
+			</form>
+		</p-card>
+	</div>
+</div>

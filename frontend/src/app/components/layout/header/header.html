@@ -1,1 +1,69 @@
-<p>header works!</p>
+
+<header class="custom-header">
+  <div class="header-content">
+    <div class="header-logo">
+      <img src="assets/logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'" />
+      <div class="header-title">
+        <span>Clínica Odontológica</span>
+        <small>Panel administrativo</small>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+.custom-header {
+  width: 100%;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  min-height: 70px;
+}
+.header-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-img {
+  height: 48px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.header-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.header-title span {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.header-title small {
+  color: #e0e7ef;
+  font-size: 0.95rem;
+}
+@media (max-width: 600px) {
+  .header-content {
+    padding: 0 0.5rem;
+  }
+  .header-title span {
+    font-size: 1rem;
+  }
+  .logo-img {
+    height: 36px;
+  }
+}
+</style>

@@ -1,11 +1,103 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ToastModule } from 'primeng/toast';
+import { SelectModule } from 'primeng/select';
+import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { PaymentService } from '../../../services/inventory/payment.service';
+import { TreatmentPlanService } from '../../../services/clinic/treatment-plan.service';
+import { Payment } from '../../../models/inventory';
+import { TreatmentPlan } from '../../../models/clinic';
 
 @Component({
-  selector: 'app-update',
-  imports: [],
+  selector: 'app-payment-update',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, InputTextModule, ButtonModule, CardModule, ToastModule, SelectModule],
+  providers: [MessageService],
   templateUrl: './update.html',
-  styleUrl: './update.css',
+  styleUrls: ['./update.css'],
 })
-export class Update {
+export class Update implements OnInit, OnDestroy {
+  form: FormGroup;
+  saving = false;
+  loading = false;
+  id: number | null = null;
+  plans: TreatmentPlan[] = [];
+  private destroy$ = new Subject<void>();
 
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router, private paymentService: PaymentService, private planService: TreatmentPlanService, private messageService: MessageService) {
+    this.form = this.fb.group({ paymentPlan: [null, [Validators.required]], paymentDateTime: ['', [Validators.required]], paymentAmount: [0, [Validators.required]], paymentMethod: [''] });
+  }
+
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const parsed = Number(idParam);
+      if (!Number.isNaN(parsed)) {
+        this.id = parsed;
+        this.planService.getAllPlans().pipe(takeUntil(this.destroy$)).subscribe({ next: (p) => (this.plans = p) });
+        this.load(parsed);
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'ID inválido' });
+        this.router.navigate(['/payments']);
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private load(id: number): void {
+    this.loading = true;
+    this.paymentService.getPaymentById(id).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (p: Payment) => {
+        this.form.patchValue({ paymentPlan: p.paymentPlan, paymentDateTime: p.paymentDateTime ?? '', paymentAmount: p.paymentAmount, paymentMethod: p.paymentMethod ?? '' });
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('load payment', err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar' });
+        this.loading = false;
+        setTimeout(() => this.router.navigate(['/payments']), 800);
+      },
+    });
+  }
+
+  get f() {
+    return this.form.controls;
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const payload: Payment = { paymentPlan: this.f['paymentPlan'].value, paymentDateTime: this.f['paymentDateTime'].value, paymentAmount: Number(this.f['paymentAmount'].value), paymentMethod: this.f['paymentMethod'].value || null };
+
+    this.saving = true;
+    const request$ = this.id ? this.paymentService.updatePayment(this.id, payload) : this.paymentService.createPayment(payload);
+    request$.pipe(finalize(() => (this.saving = false))).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Pago guardado' });
+        this.router.navigate(['/payments']);
+      },
+      error: (err) => {
+        console.error('save payment', err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar' });
+      },
+    });
+  }
+
+  cancel(): void {
+    this.router.navigate(['/payments']);
+  }
 }

@@ -1,1 +1,54 @@
-<p>create works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+	<div class="p-col-12 p-md-6">
+		<p-card>
+			<ng-template pTemplate="title">Nueva Cita</ng-template>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="p-fluid p-formgrid p-grid">
+					<div class="p-field p-col-12">
+						<label for="appointmentPatient">Paciente</label>
+						<p-select
+							[options]="patients"
+							optionLabel="patientName"
+							optionValue="id"
+							formControlName="appointmentPatient"
+							placeholder="Seleccione paciente"
+						></p-select>
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="appointmentDentist">Dentista</label>
+						<p-select
+							[options]="dentists"
+							optionLabel="dentistName"
+							optionValue="id"
+							formControlName="appointmentDentist"
+							placeholder="Seleccione dentista"
+						></p-select>
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="appointmentDateTime">Fecha y hora</label>
+						<input
+							id="appointmentDateTime"
+							type="datetime-local"
+							pInputText
+							formControlName="appointmentDateTime"
+						/>
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="appointmentReason">Motivo</label>
+						<textarea id="appointmentReason" rows="3" pInputText formControlName="appointmentReason"></textarea>
+					</div>
+				</div>
+
+				<div class="p-d-flex p-jc-end">
+					<p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+					<p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+				</div>
+			</form>
+		</p-card>
+	</div>
+</div>

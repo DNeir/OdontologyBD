@@ -1,1 +1,67 @@
-<p>update works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-between p-align-center p-mb-3">
+	<div class="p-col">
+		<h2>Editar Paciente</h2>
+		<small *ngIf="loading">Cargando datos...</small>
+	</div>
+	<div class="p-col-fixed">
+		<p-button
+			label="Volver"
+			icon="pi pi-arrow-left"
+			routerLink="/patients"
+			styleClass="p-button-secondary"
+		></p-button>
+	</div>
+</div>
+
+<p-card class="p-mt-3">
+	<form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid">
+		<div class="p-grid">
+			<div class="p-col-12 p-md-6">
+				<label for="patientName">Nombre <span class="p-error">*</span></label>
+				<input id="patientName" pInputText formControlName="patientName" placeholder="Nombre" />
+				<small *ngIf="form.get('patientName')?.invalid && form.get('patientName')?.touched" class="p-error">Nombre es requerido</small>
+			</div>
+
+			<div class="p-col-12 p-md-6">
+				<label for="patientLastName">Apellido <span class="p-error">*</span></label>
+				<input id="patientLastName" pInputText formControlName="patientLastName" placeholder="Apellido" />
+				<small *ngIf="form.get('patientLastName')?.invalid && form.get('patientLastName')?.touched" class="p-error">Apellido es requerido</small>
+			</div>
+
+			<div class="p-col-12 p-md-4">
+				<label for="patientBirthDate">Fecha de Nacimiento</label>
+				<input id="patientBirthDate" type="date" pInputText formControlName="patientBirthDate" />
+			</div>
+
+			<div class="p-col-12 p-md-4">
+				<label for="patientPhone">Teléfono</label>
+				<input id="patientPhone" pInputText formControlName="patientPhone" placeholder="Teléfono" />
+			</div>
+
+			<div class="p-col-12 p-md-4">
+				<label for="patientAddress">Dirección</label>
+				<input id="patientAddress" pInputText formControlName="patientAddress" placeholder="Dirección" />
+			</div>
+
+			<div class="p-col-12 p-text-right p-mt-3">
+				<p-button
+					label="Actualizar"
+					icon="pi pi-save"
+					type="submit"
+					[disabled]="form.invalid || saving || loading"
+					styleClass="p-button-success"
+				></p-button>
+
+				<p-button
+					label="Cancelar"
+					icon="pi pi-times"
+					routerLink="/patients"
+					styleClass="p-button-secondary p-ml-2"
+					type="button"
+				></p-button>
+			</div>
+		</div>
+	</form>
+</p-card>

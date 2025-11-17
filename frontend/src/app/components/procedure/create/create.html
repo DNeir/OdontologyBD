@@ -1,1 +1,42 @@
-<p>create works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+	<div class="p-col-12 p-md-8">
+		<p-card>
+			<ng-template pTemplate="title">Nuevo Procedimiento</ng-template>
+			<form [formGroup]="form" (ngSubmit)="onSubmit()">
+				<div class="p-fluid p-formgrid p-grid">
+					<div class="p-field p-col-12 p-md-6">
+						<label for="procedurePlan">Plan</label>
+						<p-select [options]="plans" optionLabel="id" optionValue="id" formControlName="procedurePlan" placeholder="Seleccione plan"></p-select>
+					</div>
+
+					<div class="p-field p-col-12 p-md-6">
+						<label for="procedureTreatment">Tratamiento</label>
+						<p-select [options]="treatments" optionLabel="treatmentName" optionValue="id" formControlName="procedureTreatment" placeholder="Seleccione tratamiento"></p-select>
+					</div>
+
+					<div class="p-field p-col-12 p-md-6">
+						<label for="procedureTooth">Diente (opcional)</label>
+						<p-select [options]="teeth" optionLabel="toothNumber" optionValue="id" formControlName="procedureTooth" placeholder="Seleccione diente"></p-select>
+					</div>
+
+					<div class="p-field p-col-12 p-md-6">
+						<label for="procedureDate">Fecha</label>
+						<input id="procedureDate" type="date" pInputText formControlName="procedureDate" />
+					</div>
+
+					<div class="p-field p-col-12">
+						<label for="procedureNotes">Notas</label>
+						<textarea id="procedureNotes" rows="3" pInputText formControlName="procedureNotes"></textarea>
+					</div>
+				</div>
+
+				<div class="p-d-flex p-jc-end">
+					<p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+					<p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+				</div>
+			</form>
+		</p-card>
+	</div>
+</div>

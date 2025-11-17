@@ -1,1 +1,32 @@
-<p>update works!</p>
+<p-toast></p-toast>
+
+<div class="p-grid p-justify-center">
+  <div class="p-col-12 p-md-6">
+    <p-card>
+      <ng-template pTemplate="title">Editar Material de Tratamiento</ng-template>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="p-field p-col-12">
+            <label for="tmTreatment">Tratamiento</label>
+            <p-select id="tmTreatment" [options]="treatments" optionLabel="treatmentName" optionValue="treatmentId" formControlName="tmTreatment" placeholder="Seleccionar tratamiento"></p-select>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="tmMaterial">Material</label>
+            <p-select id="tmMaterial" [options]="materials" optionLabel="materialName" optionValue="materialId" formControlName="tmMaterial" placeholder="Seleccionar material"></p-select>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="tmQuantity">Cantidad</label>
+            <input id="tmQuantity" type="number" pInputText formControlName="tmQuantity" />
+          </div>
+        </div>
+
+        <div class="p-d-flex p-jc-end">
+          <p-button label="Cancelar" class="p-button-text" (click)="cancel()"></p-button>
+          <p-button label="Guardar" type="submit" [loading]="saving" class="p-ml-2"></p-button>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

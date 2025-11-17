@@ -1,1 +1,42 @@
-<p>getall works!</p>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="p-grid p-justify-between p-align-center p-mb-3">
+	<div class="p-col"><h2>Laboratorios Dentales</h2></div>
+	<div class="p-col-fixed">
+		<p-button label="Nuevo" icon="pi pi-plus" routerLink="/dental-labs/new" styleClass="p-button-success"></p-button>
+	</div>
+</div>
+
+<p-table [value]="labs" [loading]="loading" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+	<ng-template pTemplate="header">
+		<tr>
+			<th>ID</th>
+			<th>Nombre</th>
+			<th>Teléfono</th>
+			<th>Dirección</th>
+			<th style="width:10rem">Acciones</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-l>
+		<tr>
+			<td>{{ l.id }}</td>
+			<td>{{ l.labName }}</td>
+			<td>{{ l.labPhone || '-' }}</td>
+			<td>{{ l.labAddress || '-' }}</td>
+			<td>
+				<div class="p-button-group">
+					<p-button icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top" styleClass="p-button-rounded p-button-info p-mr-1" [routerLink]="['/dental-labs/edit', l.id]"></p-button>
+					<p-button icon="pi pi-trash" pTooltip="Eliminar" tooltipPosition="top" styleClass="p-button-rounded p-button-danger" (click)="confirmDelete(l)"></p-button>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="emptymessage">
+		<tr>
+			<td colspan="5">No hay laboratorios</td>
+		</tr>
+	</ng-template>
+</p-table>
