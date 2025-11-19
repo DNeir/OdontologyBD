@@ -15,7 +15,7 @@ export class TreatmentService {
 
   getAllTreatments(): Observable<Treatment[]> {
     return this.http.get<PaginatedResponse<Treatment>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((t) => this.treatmentsSubject.next(t)),
       catchError((e) => {
         console.error(e);

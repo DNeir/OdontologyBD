@@ -16,11 +16,13 @@ export class ToothService {
   /* ---------- CRUD ---------- */
   getAllTeeth(): Observable<Tooth[]> {
     return this.http.get<PaginatedResponse<Tooth>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
-      tap((t) => this.teethSubject.next(t)),
-      catchError((e) => {
-        console.error(e);
-        return throwError(() => e);
+      map((response) => Array.isArray(response) ? response : response.results),
+      tap((teeth) => {
+        this.teethSubject.next(teeth);
+      }),
+      catchError((error) => {
+        console.error('Error fetching teeth:', error);
+        return throwError(() => error);
       }),
     );
   }

@@ -15,7 +15,7 @@ export class AppointmentService {
 
   getAllAppointments(): Observable<Appointment[]> {
     return this.http.get<PaginatedResponse<Appointment>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((a) => this.appointmentsSubject.next(a)),
       catchError((e) => {
         console.error(e);

@@ -16,11 +16,13 @@ export class MaterialService {
   /* ---------- CRUD ---------- */
   getAllMaterials(): Observable<Material[]> {
     return this.http.get<PaginatedResponse<Material>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
-      tap((m) => this.materialsSubject.next(m)),
-      catchError((e) => {
-        console.error(e);
-        return throwError(() => e);
+      map((response) => Array.isArray(response) ? response : response.results),
+      tap((materials) => {
+        this.materialsSubject.next(materials);
+      }),
+      catchError((error) => {
+        console.error('Error fetching materials:', error);
+        return throwError(() => error);
       }),
     );
   }

@@ -15,11 +15,13 @@ export class TreatmentPlanService {
 
   getAllPlans(): Observable<TreatmentPlan[]> {
     return this.http.get<PaginatedResponse<TreatmentPlan>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
-      tap((p) => this.plansSubject.next(p)),
-      catchError((e) => {
-        console.error(e);
-        return throwError(() => e);
+      map((response) => Array.isArray(response) ? response : response.results),
+      tap((plans) => {
+        this.plansSubject.next(plans);
+      }),
+      catchError((error) => {
+        console.error('Error fetching treatment plans:', error);
+        return throwError(() => error);
       }),
     );
   }

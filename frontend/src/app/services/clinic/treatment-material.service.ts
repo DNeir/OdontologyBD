@@ -14,11 +14,11 @@ export class TreatmentMaterialService {
   constructor(private http: HttpClient) {}
 
   getAllTreatmentMaterials(): Observable<TreatmentMaterial[]> {
-    return this.http.get<PaginatedResponse<TreatmentMaterial>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+    return this.http.get<any>(`${this.baseUrl}/`).pipe(
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((tms) => this.tmsSubject.next(tms)),
       catchError((e) => {
-        console.error(e);
+        console.error('Error fetching treatment materials:', e);
         return throwError(() => e);
       }),
     );
@@ -34,30 +34,39 @@ export class TreatmentMaterialService {
   }
 
   createTreatmentMaterial(data: TreatmentMaterial): Observable<TreatmentMaterial> {
-    return this.http
-      .post<TreatmentMaterial>(`${this.baseUrl}/`, data)
-      .pipe(tap(() => this.refreshTreatmentMaterials()));
+    return this.http.post<TreatmentMaterial>(`${this.baseUrl}/`, data).pipe(
+      tap(() => this.refreshTreatmentMaterials()),
+      catchError((e) => {
+        console.error('Error creating treatment material:', e);
+        return throwError(() => e);
+      })
+    );
   }
 
-  updateTreatmentMaterial(
-    id: number,
-    data: Partial<TreatmentMaterial>,
-  ): Observable<TreatmentMaterial> {
-    return this.http
-      .put<TreatmentMaterial>(`${this.baseUrl}/${id}/`, data)
-      .pipe(tap(() => this.refreshTreatmentMaterials()));
+  updateTreatmentMaterial(id: number, data: Partial<TreatmentMaterial>): Observable<TreatmentMaterial> {
+    return this.http.put<TreatmentMaterial>(`${this.baseUrl}/${id}/`, data).pipe(
+      tap(() => this.refreshTreatmentMaterials()),
+      catchError((e) => {
+        console.error('Error updating treatment material:', e);
+        return throwError(() => e);
+      })
+    );
   }
 
   deleteTreatmentMaterial(id: number): Observable<void> {
-    return this.http
-      .delete<void>(`${this.baseUrl}/${id}/`)
-      .pipe(tap(() => this.refreshTreatmentMaterials()));
+    return this.http.delete<void>(`${this.baseUrl}/${id}/`).pipe(
+      tap(() => this.refreshTreatmentMaterials()),
+      catchError((e) => {
+        console.error('Error deleting treatment material:', e);
+        return throwError(() => e);
+      })
+    );
   }
 
   refreshTreatmentMaterials(): void {
     this.getAllTreatmentMaterials().subscribe({
-      next: (tms) => this.tmsSubject.next(tms),
-      error: (err) => console.error('refreshTreatmentMaterials', err),
+      next: (tms: TreatmentMaterial[]) => this.tmsSubject.next(tms),
+      error: (err: any) => console.error('refreshTreatmentMaterials', err),
     });
   }
 }

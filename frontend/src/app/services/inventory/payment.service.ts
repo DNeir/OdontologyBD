@@ -15,7 +15,7 @@ export class PaymentService {
 
   getAllPayments(): Observable<Payment[]> {
     return this.http.get<PaginatedResponse<Payment>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((p) => this.paymentsSubject.next(p)),
       catchError((e) => {
         console.error(e);

@@ -15,7 +15,7 @@ export class PatientService {
 
   getAllPatients(): Observable<Patient[]> {
     return this.http.get<PaginatedResponse<Patient>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((p) => this.patientsSubject.next(p)),
       catchError((e) => {
         console.error(e);

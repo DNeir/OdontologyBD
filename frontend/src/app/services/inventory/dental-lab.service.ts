@@ -22,6 +22,16 @@ export class DentalLabService {
         return throwError(() => e);
       }),
     );
+      return this.http.get<any>(`${this.baseUrl}/`).pipe(
+        map((response) => Array.isArray(response) ? response : response.results),
+        tap((labs) => {
+          this.labsSubject.next(labs);
+        }),
+        catchError((error) => {
+          console.error('Error fetching dental labs:', error);
+          return throwError(() => error);
+        }),
+      );
   }
 
   getLabById(id: number): Observable<DentalLab> {

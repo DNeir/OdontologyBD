@@ -15,7 +15,7 @@ export class ProcedureService {
 
   getAllProcedures(): Observable<Procedure[]> {
     return this.http.get<PaginatedResponse<Procedure>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((p) => this.proceduresSubject.next(p)),
       catchError((e) => {
         console.error(e);

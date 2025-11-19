@@ -15,11 +15,13 @@ export class DentalHistoryService {
 
   getAllHistories(): Observable<DentalHistory[]> {
     return this.http.get<PaginatedResponse<DentalHistory>>(`${this.baseUrl}/`).pipe(
-      map((res) => res.results),
-      tap((h) => this.historiesSubject.next(h)),
-      catchError((e) => {
-        console.error(e);
-        return throwError(() => e);
+      map((response) => Array.isArray(response) ? response : response.results),
+      tap((histories) => {
+        this.historiesSubject.next(histories);
+      }),
+      catchError((error) => {
+        console.error('Error fetching dental histories:', error);
+        return throwError(() => error);
       }),
     );
   }

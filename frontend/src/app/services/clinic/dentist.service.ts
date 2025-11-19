@@ -16,8 +16,8 @@ export class DentistService {
   constructor(private http: HttpClient) {}
 
   getAllDentists(): Observable<Dentist[]> {
-    return this.http.get<PaginatedResponse<Dentist>>(`${this.baseUrl}/`).pipe(
-      map((response) => response.results),
+    return this.http.get<any>(`${this.baseUrl}/`).pipe(
+      map((response) => Array.isArray(response) ? response : response.results),
       tap((dentists) => {
         console.log('Fetched dentists:', dentists);
         this.dentistsSubject.next(dentists);
